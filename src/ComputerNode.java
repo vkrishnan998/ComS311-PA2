@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.List;
 
 public class ComputerNode {
@@ -9,6 +10,7 @@ public class ComputerNode {
 	public ComputerNode(int id, int timestamp) {
 		this.id = id;
 		this.timestamp = timestamp;
+		neighbors = new ArrayList<ComputerNode>();
 	}
 	
 	public int getID() {
