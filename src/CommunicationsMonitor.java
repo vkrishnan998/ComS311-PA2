@@ -35,13 +35,12 @@ public class CommunicationsMonitor {
 			int timestamp = tripleArr[i].timestamp;
 			
 			
-			
 			if (!computerMapping.containsKey(c1)) {
 				ArrayList<ComputerNode> list = new ArrayList<ComputerNode>();
 				list.add(new ComputerNode(c1, timestamp));
 				computerMapping.put(c1, list);
 			}
-			else {
+			else if (computerMapping.containsKey(c1) && checkDuplicate(tripleArr[i].ci)){
 				int size = computerMapping.get(c1).size();
 				computerMapping.get(c1).get(size - 1).neighbors.add(tripleArr[i].ci);
 				computerMapping.get(c1).add(new ComputerNode(c1, timestamp));
@@ -49,10 +48,10 @@ public class CommunicationsMonitor {
 			
 			if (!computerMapping.containsKey(c2)) {
 				ArrayList<ComputerNode> list = new ArrayList<ComputerNode>();
-				list.add(new ComputerNode(c1, timestamp));
+				list.add(new ComputerNode(c2, timestamp));
 				computerMapping.put(c2, list);
 			}
-			else {
+			else if (computerMapping.containsKey(c2) && checkDuplicate(tripleArr[i].cj)){
 				int size = computerMapping.get(c2).size();
 				computerMapping.get(c2).get(size - 1).neighbors.add(tripleArr[i].cj);
 				computerMapping.get(c2).add(new ComputerNode(c2, timestamp));
@@ -81,7 +80,14 @@ public class CommunicationsMonitor {
 		return computerMapping.get(c);
 	}
 	
-	
+	public boolean checkDuplicate(ComputerNode c) {
+		for (int i = 0; i < computerMapping.get(c.id).size(); i++) {
+			if (c.timestamp == computerMapping.get(c.id).get(i).timestamp) {
+				return false;
+			}
+		}
+		return true;
+	}
 	
 	public void mergeSortTriples(Triple arr[], int l, int r) {
 		if (l < r) 
@@ -168,6 +174,7 @@ public class CommunicationsMonitor {
 		monitor.addCommunication(2, 4, 8);
 		monitor.addCommunication(3, 4, 8);
 		monitor.addCommunication(1, 4, 12);
+		monitor.addCommunication(1, 3, 4);
 		
 		monitor.createGraph();
 		
