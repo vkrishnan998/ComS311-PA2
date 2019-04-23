@@ -38,6 +38,8 @@ public class CommunicationsMonitor {
 			tripleArr[i].ci.neighbors.add(tripleArr[i].cj);
 			tripleArr[i].cj.neighbors.add(tripleArr[i].ci);
 			
+			
+			
 			if (!computerMapping.containsKey(c1)) {
 				ArrayList<ComputerNode> list = new ArrayList<ComputerNode>();
 				list.add(tripleArr[i].ci);
@@ -70,6 +72,7 @@ public class CommunicationsMonitor {
 	}
 	
 	public List<ComputerNode> queryInfection(int c1, int c2, int x, int y) {
+		
 		return null;
 	}
 	
@@ -79,6 +82,10 @@ public class CommunicationsMonitor {
 	
 	public List<ComputerNode> getComputerMapping(int c) {
 		return computerMapping.get(c);
+	}
+	
+	public void DFS() {
+		
 	}
 	
 	public boolean checkDuplicate(ComputerNode c) {
