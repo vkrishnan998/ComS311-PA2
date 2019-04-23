@@ -34,10 +34,13 @@ public class CommunicationsMonitor {
 			int c2 = tripleArr[i].cj.id;
 			int timestamp = tripleArr[i].timestamp;
 			
+			// Add directed edge from ci to cj and cj to ci to each other neighbor lists
+			tripleArr[i].ci.neighbors.add(tripleArr[i].cj);
+			tripleArr[i].cj.neighbors.add(tripleArr[i].ci);
 			
 			if (!computerMapping.containsKey(c1)) {
 				ArrayList<ComputerNode> list = new ArrayList<ComputerNode>();
-				list.add(new ComputerNode(c1, timestamp));
+				list.add(tripleArr[i].ci);
 				computerMapping.put(c1, list);
 			}
 			else if (computerMapping.containsKey(c1) && checkDuplicate(tripleArr[i].ci)){
@@ -48,7 +51,7 @@ public class CommunicationsMonitor {
 			
 			if (!computerMapping.containsKey(c2)) {
 				ArrayList<ComputerNode> list = new ArrayList<ComputerNode>();
-				list.add(new ComputerNode(c2, timestamp));
+				list.add(tripleArr[i].cj);
 				computerMapping.put(c2, list);
 			}
 			else if (computerMapping.containsKey(c2) && checkDuplicate(tripleArr[i].cj)){
@@ -57,9 +60,7 @@ public class CommunicationsMonitor {
 				computerMapping.get(c2).add(new ComputerNode(c2, timestamp));
 			}
 			
-			// Add directed edge from ci to cj and cj to ci to each other neighbor lists
-			tripleArr[i].ci.neighbors.add(tripleArr[i].cj);
-			tripleArr[i].cj.neighbors.add(tripleArr[i].ci);
+			
 			
 			
 		}
