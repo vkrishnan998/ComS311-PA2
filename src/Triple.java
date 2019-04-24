@@ -15,4 +15,5 @@ public class Triple {
 	public int getTimestamp() {
 		return timestamp;
 	}
+	
 }

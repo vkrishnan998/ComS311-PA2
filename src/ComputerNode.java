@@ -21,7 +21,7 @@ public class ComputerNode {
 		return timestamp;
 	}
 	
-	public List<ComputerNode> getOurNeighbors() {
+	public List<ComputerNode> getOutNeighbors() {
 		return neighbors;
 	}
 	

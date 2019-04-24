@@ -18,7 +18,9 @@ public class CommunicationsMonitor {
 	}
 
 	public void addCommunication(int c1, int c2, int timestamp) {
-		triplesList.add(new Triple(new ComputerNode(c1, timestamp), new ComputerNode(c2, timestamp), timestamp));
+		if (computerMapping.isEmpty()) {
+			triplesList.add(new Triple(new ComputerNode(c1, timestamp), new ComputerNode(c2, timestamp), timestamp));
+		}
 	}
 
 	public void createGraph() {
@@ -70,6 +72,9 @@ public class CommunicationsMonitor {
 	public List<ComputerNode> queryInfection(int c1, int c2, int x, int y) {
 		infected = false;
 		ComputerNode cb = new ComputerNode(c2, y);
+		if (!computerMapping.containsKey(c1)) {
+			return null;
+		}
 		for (int i = 0; i < computerMapping.get(c1).size(); i++) {
 			if (computerMapping.get(c1).get(i).timestamp >= x) {
 				DFS(computerMapping.get(c1).get(i), cb, y);
@@ -100,7 +105,7 @@ public class CommunicationsMonitor {
 		Iterator<ComputerNode> i = ca.neighbors.listIterator();
 		while (i.hasNext()) {
 			ComputerNode n = i.next();
-			if (n.id == cb.id && cb.timestamp <= y && !visited.containsKey(cb)) {
+			if (n.id == cb.id && n.timestamp <= y && !visited.containsKey(cb)) {
 				transmissionSeq.add(cb);
 				visited.put(cb, true);
 				infected = true;
