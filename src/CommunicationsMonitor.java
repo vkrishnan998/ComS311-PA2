@@ -1,16 +1,21 @@
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 public class CommunicationsMonitor {
 
 	HashMap<Integer, List<ComputerNode>> computerMapping;
 	ArrayList<Triple> triplesList;
+	ArrayList<ComputerNode> transmissionSeq;
+	Boolean infected;
 	
 	
 	public CommunicationsMonitor() {
 		computerMapping = new HashMap<Integer, List<ComputerNode>>();
 		triplesList = new ArrayList<Triple>();
+		transmissionSeq = new ArrayList<ComputerNode>();
+		infected = false;
 	}
 	
 	public void addCommunication(int c1, int c2, int timestamp) {
@@ -39,13 +44,12 @@ public class CommunicationsMonitor {
 			tripleArr[i].cj.neighbors.add(tripleArr[i].ci);
 			
 			
-			
 			if (!computerMapping.containsKey(c1)) {
 				ArrayList<ComputerNode> list = new ArrayList<ComputerNode>();
 				list.add(tripleArr[i].ci);
 				computerMapping.put(c1, list);
 			}
-			else if (computerMapping.containsKey(c1) && checkDuplicate(tripleArr[i].ci)){
+			else if (computerMapping.containsKey(c1) && checkDuplicate(tripleArr[i].ci, tripleArr[i].cj)){
 				int size = computerMapping.get(c1).size();
 				computerMapping.get(c1).get(size - 1).neighbors.add(tripleArr[i].ci);
 				computerMapping.get(c1).add(new ComputerNode(c1, timestamp));
@@ -56,23 +60,27 @@ public class CommunicationsMonitor {
 				list.add(tripleArr[i].cj);
 				computerMapping.put(c2, list);
 			}
-			else if (computerMapping.containsKey(c2) && checkDuplicate(tripleArr[i].cj)){
+			else if (computerMapping.containsKey(c2) && checkDuplicate(tripleArr[i].cj, tripleArr[i].ci)){
 				int size = computerMapping.get(c2).size();
 				computerMapping.get(c2).get(size - 1).neighbors.add(tripleArr[i].cj);
 				computerMapping.get(c2).add(new ComputerNode(c2, timestamp));
 			}
-			
-			
-			
-			
+		
 		}
-		
-		
 		
 	}
 	
 	public List<ComputerNode> queryInfection(int c1, int c2, int x, int y) {
-		
+		ComputerNode cb = new ComputerNode(c2, y);
+		for (int i = 0; i < computerMapping.get(c1).size(); i++) {
+			if (computerMapping.get(c1).get(i).timestamp >= x) {
+				transmissionSeq.add(computerMapping.get(c1).get(i));
+				DFS(computerMapping.get(c1).get(i), cb, y);
+			}
+		}
+		if (infected) {
+			return transmissionSeq;
+		}
 		return null;
 	}
 	
@@ -84,13 +92,33 @@ public class CommunicationsMonitor {
 		return computerMapping.get(c);
 	}
 	
-	public void DFS() {
+	public void DFS(ComputerNode ca, ComputerNode cb, int y) {
 		
+		HashMap<ComputerNode, Boolean> visited = new HashMap<ComputerNode, Boolean>();
+		
+		DFSVisit(ca, cb, y, visited);
 	}
 	
-	public boolean checkDuplicate(ComputerNode c) {
-		for (int i = 0; i < computerMapping.get(c.id).size(); i++) {
-			if (c.timestamp == computerMapping.get(c.id).get(i).timestamp) {
+	public void DFSVisit(ComputerNode ca, ComputerNode cb, int y, HashMap<ComputerNode, Boolean> visited) {
+		visited.put(ca, true);
+		Iterator<ComputerNode> i = ca.neighbors.listIterator(); 
+		while (i.hasNext()) {
+			ComputerNode n = i.next();
+			transmissionSeq.add(n);
+			if (n.equals(cb) && cb.timestamp <= y) {
+				infected = true;
+				return;
+			}
+			else if (!visited.containsKey(n)) {
+				DFSVisit(n, cb, y, visited);
+			}
+		}
+	}
+	
+	public boolean checkDuplicate(ComputerNode ci, ComputerNode cj) {
+		for (int i = 0; i < computerMapping.get(ci.id).size(); i++) {
+			if (ci.timestamp == computerMapping.get(ci.id).get(i).timestamp) {
+				computerMapping.get(ci.id).get(i).neighbors.add(cj);
 				return false;
 			}
 		}
@@ -185,6 +213,7 @@ public class CommunicationsMonitor {
 		monitor.addCommunication(1, 3, 4);
 		
 		monitor.createGraph();
+		monitor.queryInfection(1, 3, 4, 8);
 		
 		
 	}
