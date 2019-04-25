@@ -18,7 +18,7 @@ public class CommunicationsMonitor {
 	}	
 	
 	public void createGraph() {
-		
+		 
 		// copy arrayList into array for mergeSort
 		Triple[] tripleArr = new Triple[triplesList.size()];
 		for (int i = 0; i < triplesList.size(); i++) {
@@ -37,8 +37,6 @@ public class CommunicationsMonitor {
 			// Add directed edge from ci to cj and cj to ci to each other neighbor lists
 			tripleArr[i].ci.neighbors.add(tripleArr[i].cj);
 			tripleArr[i].cj.neighbors.add(tripleArr[i].ci);
-			
-			
 			
 			if (!computerMapping.containsKey(c1)) {
 				ArrayList<ComputerNode> list = new ArrayList<ComputerNode>();
@@ -60,15 +58,8 @@ public class CommunicationsMonitor {
 				int size = computerMapping.get(c2).size();
 				computerMapping.get(c2).get(size - 1).neighbors.add(tripleArr[i].cj);
 				computerMapping.get(c2).add(new ComputerNode(c2, timestamp));
-			}
-			
-			
-			
-			
+			}			
 		}
-		
-		
-		
 	}
 	
 	public List<ComputerNode> queryInfection(int c1, int c2, int x, int y) {
@@ -185,6 +176,7 @@ public class CommunicationsMonitor {
 		monitor.addCommunication(1, 3, 4);
 		
 		monitor.createGraph();
+		
 		
 		
 	}
