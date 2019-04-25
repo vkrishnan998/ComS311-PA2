@@ -39,7 +39,6 @@ public class CommunicationsMonitor {
 			// the hashmap
 			int c1 = tripleArr[i].ci.id;
 			int c2 = tripleArr[i].cj.id;
-			int timestamp = tripleArr[i].timestamp;
 
 			// Add directed edge from ci to cj and cj to ci to each other neighbor lists
 			tripleArr[i].ci.neighbors.add(tripleArr[i].cj);
@@ -88,14 +87,12 @@ public class CommunicationsMonitor {
 	}
 
 	public void DFS(ComputerNode ca, ComputerNode cb, int y) {
-
 		HashMap<ComputerNode, Boolean> visited = new HashMap<ComputerNode, Boolean>();
-
 		DFSVisit(ca, cb, y, visited);
 	}
 
 	public void DFSVisit(ComputerNode ca, ComputerNode cb, int y, HashMap<ComputerNode, Boolean> visited) {
-		if(visited.containsKey(cb)) {
+		if (visited.containsKey(cb)) {
 			return;
 		}
 		if (!visited.containsKey(ca)) {
@@ -149,26 +146,20 @@ public class CommunicationsMonitor {
 	}
 
 	public void merge(Triple arr[], int l, int m, int r) {
-		// Find sizes of two subarrays to be merged
+
 		int n1 = m - l + 1;
 		int n2 = r - m;
 
-		/* Create temp arrays */
 		Triple L[] = new Triple[n1];
 		Triple R[] = new Triple[n2];
 
-		/* Copy data to temp arrays */
 		for (int i = 0; i < n1; ++i)
 			L[i] = arr[l + i];
 		for (int j = 0; j < n2; ++j)
 			R[j] = arr[m + 1 + j];
 
-		/* Merge the temp arrays */
-
-		// Initial indexes of first and second subarrays
 		int i = 0, j = 0;
 
-		// Initial index of merged subarry array
 		int k = l;
 		while (i < n1 && j < n2) {
 			if (L[i].timestamp <= R[j].timestamp) {
@@ -181,14 +172,12 @@ public class CommunicationsMonitor {
 			k++;
 		}
 
-		/* Copy remaining elements of L[] if any */
 		while (i < n1) {
 			arr[k] = L[i];
 			i++;
 			k++;
 		}
 
-		/* Copy remaining elements of R[] if any */
 		while (j < n2) {
 			arr[k] = R[j];
 			j++;
@@ -198,10 +187,6 @@ public class CommunicationsMonitor {
 
 	public static void main(String[] args) {
 		CommunicationsMonitor monitor = new CommunicationsMonitor();
-		/*
-		 * for(int i=0; i<10; i++) { for(int j=1; j<11; j++) { if(i<j) continue; for(int
-		 * t=1; t<10; t++) { monitor.addCommunication(i, j, t); } } }
-		 */
 
 		monitor.addCommunication(1, 4, 12);
 		monitor.addCommunication(1, 2, 4);
@@ -210,13 +195,10 @@ public class CommunicationsMonitor {
 
 		monitor.createGraph();
 		monitor.queryInfection(1, 3, 4, 8);
-		
-		for (ComputerNode i: monitor.transmissionSeq) {
+
+		for (ComputerNode i : monitor.transmissionSeq) {
 			System.out.println(i.id + " " + i.timestamp);
 		}
-		
-		
-		//System.out.println(visited.containsKey(a));
 
 	}
 
